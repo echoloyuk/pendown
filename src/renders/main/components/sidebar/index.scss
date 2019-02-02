@@ -1,0 +1,29 @@
+$w: 42px;
+.side-bar-container {
+  width: $w;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border-right: 1px solid #ccc;
+  position: absolute;
+  background: #fff;
+
+  .side-bar-nav {
+    .item {
+      width: $w;
+      height: $w;
+      font-size: $w / 2;
+      line-height: $w / 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px 0 0;
+      cursor: pointer;
+      transition: all .3s;
+
+      &:hover {
+        color: #ccc;
+      }
+    }
+  }
+}
