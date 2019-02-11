@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import SideBar from '../components/sidebar';
 import TitleInput from '../components/title-input';
 import Editor from '../components/editor';
+import Reviewer from '../components/reviewer';
 import * as actions from '../actions/';
 
 import './index.scss';
@@ -21,7 +22,9 @@ class Container extends React.Component {
             <TitleInput />
             <Editor />
           </div>
-          <div className="review-panel"></div>
+          <div className="review-panel">
+            <Reviewer />
+          </div>
         </div>
       </div>
     )

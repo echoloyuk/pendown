@@ -3,6 +3,7 @@ $h: 50px;
 .title-input-panel {
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
+  flex-shrink: 0;
 
   .title-input {
     border: none;

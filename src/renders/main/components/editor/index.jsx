@@ -19,7 +19,6 @@ export default class Editor extends React.Component {
           showPrintMargin={false}
           tabSize={2}
           showGutter={false}
-          maxLines={Infinity}
           style={{
             minHeight: 100,
             backgroundColor: 'transparent'
