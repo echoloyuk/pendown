@@ -28,5 +28,12 @@ $w: 42px;
     .review-panel {
       border-left: 1px solid #ccc;
     }
+    .editor-panel {
+      // display: flex;
+      // flex-direction: column;
+      // justify-content: space-between;
+      // align-items: stretch;
+      overflow: auto;
+    }
   }
 }
