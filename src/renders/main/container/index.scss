@@ -1,6 +1,7 @@
 html, body {
   padding: 0;
   margin: 0;
+  font-family: 'STHeitiSC-Light', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 $w: 42px;
 .main-container {
@@ -27,6 +28,7 @@ $w: 42px;
     }
     .review-panel {
       border-left: 1px solid #ccc;
+      overflow-y: auto;
     }
     .editor-panel {
       display: flex;

@@ -24,6 +24,7 @@ class Container extends React.Component {
           </div>
           <div className="review-panel">
             <Reviewer />
+            
           </div>
         </div>
       </div>
