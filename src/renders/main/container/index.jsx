@@ -19,12 +19,11 @@ class Container extends React.Component {
         <SideBar />
         <div className="editor-container">
           <div className="editor-panel">
-            <TitleInput />
-            <Editor />
+            <TitleInput {...this.props} />
+            <Editor {...this.props} />
           </div>
           <div className="review-panel">
-            <Reviewer />
-            
+            <Reviewer {...this.props} />
           </div>
         </div>
       </div>

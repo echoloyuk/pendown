@@ -4,7 +4,10 @@ import * as types from '../constants/ActionTypes';
 
 const initStates = {
   buttonText: '点击+1',
-  exampleCount: 0
+  exampleCount: 0,
+
+  title: '', // 标题
+  markdownContent: '', // markdown原文
 }
 
 const reducer = handleActions({
@@ -18,6 +21,20 @@ const reducer = handleActions({
       return {
         ...state
       }
+    }
+  },
+  [types.INPUT_TITLE] (state, action) {
+    const val = action.payload;
+    return {
+      ...state,
+      title: val
+    }
+  },
+  [types.INPUT_MARKDOWN_CONTENT] (state, action) {
+    const val = action.payload;
+    return {
+      ...state,
+      markdownContent: val
     }
   }
 }, initStates);

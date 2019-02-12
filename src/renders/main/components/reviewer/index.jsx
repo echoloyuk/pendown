@@ -1,44 +1,30 @@
 import React from 'react';
+import marked from 'marked';
 
 import './index.scss';
+import './markdown.scss';
 
 export default class Reviewer extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  getHtml(str) {
+    return marked(str);
+  }
+
   render() {
+    const {
+      markdownContent,
+      title
+    } = this.props;
+    const html = this.getHtml(markdownContent);
     return (
       <div className="reviewer-comp-panel">
         <div className="title-panel">
-          <div className="title">这是一个测试标题这是一个测试标题这是一个测试标题</div>
+          <div className="title">{title}</div>
         </div>
-        <div className="content-panel">
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          <h2>测试</h2>
-          <hr/>
-          <p>测试文案</p>
-          
-        </div>
+        <div className="content-panel markdown" dangerouslySetInnerHTML={{__html: html}} />
       </div>
     )
   }
