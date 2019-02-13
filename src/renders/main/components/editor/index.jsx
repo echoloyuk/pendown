@@ -34,6 +34,7 @@ export default class Editor extends React.Component {
           showGutter={false}
           value={markdownContent}
           onChange={this.onChangeContentHandler}
+          maxLines={1000000}
           style={{
             minHeight: 100,
             backgroundColor: 'transparent'

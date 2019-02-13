@@ -6,6 +6,8 @@ import configureStore from './store/configureStore';
 import Container from './container/index';
 import './index.scss';
 
+import "antd/dist/antd.css";
+
 const store = configureStore({});
 
 ReactDom.render((
