@@ -8,6 +8,10 @@ const initStates = {
 
   title: '', // 标题
   markdownContent: '', // markdown原文
+  
+  pendownTitle: 'pendown', // pendown软件的title框
+  oTitle: '', // 原始的文章标题
+  oMarkdownContent: '' // 原始的文章markdown正文
 }
 
 const reducer = handleActions({

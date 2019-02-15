@@ -10,8 +10,11 @@ import * as actions from '../actions/';
 import { saveFile } from '../../../service/fs';
 import OP from '../constants/op';
 import { getOP } from '../util/op';
+import { setTitle } from '../api/others';
 
 import './index.scss';
+
+let isChangePendownTitle = false;
 
 class Container extends React.Component {
   constructor(props) {
@@ -32,7 +35,27 @@ class Container extends React.Component {
     });
   }
   
+  shouldComponentUpdate(nextProps) {
+    const {
+      oTitle,
+      oMarkdownContent,
+      title,
+      markdownContent,
+      pendownTitle
+    } = nextProps;
+    if (oTitle === title && oMarkdownContent === markdownContent) {
+      setTitle(pendownTitle);
+    } else {
+      setTitle('* ' + pendownTitle);
+    }
+    return true;
+  }
+
   componentDidMount() {
+    const {
+      pendownTitle
+    } = this.props;
+    setTitle(pendownTitle);
     // 绑定save事件
     document.addEventListener('keydown', (e) => {
       const {
@@ -53,7 +76,8 @@ class Container extends React.Component {
   render() {
     return (
       <div className="main-container">
-        <SideBar />
+        <SideBar
+          onSave={() => {this.doSave()}} />
         <div className="editor-container">
           <div className="editor-panel">
             <TitleInput {...this.props} />
