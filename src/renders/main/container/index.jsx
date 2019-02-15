@@ -4,10 +4,11 @@ import SideBar from '../components/sidebar';
 import TitleInput from '../components/title-input';
 import Editor from '../components/editor';
 import Reviewer from '../components/reviewer';
+import Loading from '../components/loading';
 import { message } from 'antd';
 import * as actions from '../actions/';
 
-import { saveFile } from '../../../service/fs';
+import { saveFile, readFile } from '../../../service/fs';
 import OP from '../constants/op';
 import { getOP } from '../util/op';
 import { setTitle } from '../api/others';
@@ -33,6 +34,16 @@ class Container extends React.Component {
         message.error(e);
       }
     });
+  }
+
+  doRead() {
+    readFile().then(data => {
+      console.log(data);
+    }).catch(e => {
+      if (e) {
+        message.error(e.toString());
+      }
+    })
   }
   
   shouldComponentUpdate(nextProps) {
@@ -77,7 +88,8 @@ class Container extends React.Component {
     return (
       <div className="main-container">
         <SideBar
-          onSave={() => {this.doSave()}} />
+          onSave={() => {this.doSave()}}
+          onRead={() => {this.doRead()}} />
         <div className="editor-container">
           <div className="editor-panel">
             <TitleInput {...this.props} />
@@ -87,6 +99,7 @@ class Container extends React.Component {
             <Reviewer {...this.props} />
           </div>
         </div>
+        <Loading />
       </div>
     )
   }

@@ -8,8 +8,6 @@ function saveFile (filePath, content) {
   // 如果是新增，需要弹出一个新的窗口来保存
   if (!filePath) {
     filePath = dialog.showSaveDialog({
-      title: '保存文件',
-      message: '保存文件',
       nameFieldLabel: '文件名',
       filters: [
         {name: 'markdown', extensions: ['md', 'markdown']}
@@ -19,10 +17,12 @@ function saveFile (filePath, content) {
   return new Promise((resolve, reject) => {
     if (!filePath) {
       reject(null);
+      return;
     }
     fs.writeFile(filePath, content, (err) => {
       if (err) {
         reject(err);
+        return;
       }
       console.log('save success');
       resolve();
@@ -30,6 +30,38 @@ function saveFile (filePath, content) {
   });
 }
 
+function readFile(filePath) {
+  return new Promise((resolve, reject) => {
+    if (!filePath) {
+      filePath = dialog.showOpenDialog({
+        properties: [
+          'openFile'
+        ],
+        filters: [
+          {name: 'markdown', extensions: ['md', 'markdown']}
+        ]
+      }); 
+      // filePath will return ['/path/to/string'];
+      if (filePath && filePath.length) {
+        filePath = filePath[0];
+      } else {
+        reject('读取文件失败');
+      }
+    }
+    if (!filePath) {
+      reject('不合法的文件路径');
+    }
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(data);
+    })
+  });
+}
+
 module.exports = {
-  saveFile
+  saveFile,
+  readFile
 }

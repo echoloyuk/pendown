@@ -6,6 +6,7 @@ export default class SideBar extends React.Component {
   constructor(props) {
     super(props);
     this.onSaveHandler = this.onSaveHandler.bind(this);
+    this.onReadHandler = this.onReadHandler.bind(this);
   }
   onSaveHandler() {
     const {
@@ -13,6 +14,14 @@ export default class SideBar extends React.Component {
     } = this.props;
     if (typeof onSave === 'function') {
       onSave();
+    }
+  }
+  onReadHandler() {
+    const {
+      onRead
+    } = this.props;
+    if (typeof onRead === 'function') {
+      onRead();
     }
   }
 
@@ -26,7 +35,7 @@ export default class SideBar extends React.Component {
           <div className="item" onClick={this.onSaveHandler}>
             <Icon type="save" />
           </div>
-          <div className="item">
+          <div className="item" onClick={this.onReadHandler}>
             <Icon type="folder-open" />
           </div>
           <div className="item">
