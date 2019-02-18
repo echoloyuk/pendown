@@ -15,8 +15,6 @@ import { setTitle } from '../api/others';
 
 import './index.scss';
 
-let isChangePendownTitle = false;
-
 class Container extends React.Component {
   constructor(props) {
     super(props);
@@ -27,7 +25,7 @@ class Container extends React.Component {
       title,
       markdownContent
     } = this.props;
-    saveFile(null, `# ${title} \r\n\r\n` + markdownContent).then(() => {
+    saveFile(null, `# ${title}\n` + markdownContent).then(() => {
       message.success('保存成功');
     }).catch(e => {
       if (e) {
@@ -37,13 +35,10 @@ class Container extends React.Component {
   }
 
   doRead() {
-    readFile().then(data => {
-      console.log(data);
-    }).catch(e => {
-      if (e) {
-        message.error(e.toString());
-      }
-    })
+    const {
+      doReadFile
+    } = this.props;
+    doReadFile();
   }
   
   shouldComponentUpdate(nextProps) {
@@ -85,6 +80,9 @@ class Container extends React.Component {
   }
 
   render() {
+    const {
+      loading
+    } = this.props;
     return (
       <div className="main-container">
         <SideBar
@@ -99,7 +97,7 @@ class Container extends React.Component {
             <Reviewer {...this.props} />
           </div>
         </div>
-        <Loading />
+        <Loading show={loading} />
       </div>
     )
   }

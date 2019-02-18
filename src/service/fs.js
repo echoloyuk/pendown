@@ -56,12 +56,37 @@ function readFile(filePath) {
         reject(err);
         return;
       }
-      resolve(data);
+      resolve({
+        filePath,
+        content: data
+      });
     })
   });
 }
 
+function readFileToSpec(filePath) {
+  return readFile(filePath).then(res => {
+    const {
+      content
+    } = res;
+    let title = '';
+    let _content = content;
+    if (content.trim()[0] === '#' && content.trim()[1] === ' ') {
+      title = content.trim().split('\n')[0];
+      title = title.substr(2);
+      _content = content.substr(content.indexOf('\n') + 1);
+    }
+    return Promise.resolve({
+      title,
+      content: _content
+    });
+  }).catch(err => {
+    return Promise.reject(err);
+  })
+}
+
 module.exports = {
   saveFile,
-  readFile
+  readFile,
+  readFileToSpec
 }

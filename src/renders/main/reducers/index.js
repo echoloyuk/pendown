@@ -8,6 +8,7 @@ const initStates = {
 
   title: '', // 标题
   markdownContent: '', // markdown原文
+  loading: false, // 全屏阻塞加载
   
   pendownTitle: 'pendown', // pendown软件的title框
   oTitle: '', // 原始的文章标题
@@ -39,6 +40,30 @@ const reducer = handleActions({
     return {
       ...state,
       markdownContent: val
+    }
+  },
+  [types.START_READ_FILE](state) {
+    return {
+      ...state,
+      loading: true
+    }
+  },
+  [types.FINISH_READ_FILE](state, action) {
+    if (!action.payload) {
+      return {
+        ...state,
+        loading: false
+      }
+    }
+    const {
+      title,
+      content
+    } = action.payload;
+    return {
+      ...state,
+      loading: false,
+      title,
+      markdownContent: content
     }
   }
 }, initStates);
