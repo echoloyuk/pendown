@@ -5,10 +5,7 @@ import TitleInput from '../components/title-input';
 import Editor from '../components/editor';
 import Reviewer from '../components/reviewer';
 import Loading from '../components/loading';
-import { message } from 'antd';
 import * as actions from '../actions/';
-
-import { saveFile, readFile } from '../../../service/fs';
 import OP from '../constants/op';
 import { getOP } from '../util/op';
 import { setTitle } from '../api/others';
@@ -22,16 +19,11 @@ class Container extends React.Component {
 
   doSave() {
     const {
+      doSaveFile,
       title,
       markdownContent
     } = this.props;
-    saveFile(null, `# ${title}\n` + markdownContent).then(() => {
-      message.success('保存成功');
-    }).catch(e => {
-      if (e) {
-        message.error(e);
-      }
-    });
+    doSaveFile(title, markdownContent);
   }
 
   doRead() {

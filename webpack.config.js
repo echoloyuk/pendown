@@ -19,6 +19,7 @@ getEntry();
 module.exports = {
   entry: getEntry,
   target: 'electron-renderer',
+  mode: 'development',
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'build')

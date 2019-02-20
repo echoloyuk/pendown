@@ -42,17 +42,22 @@ const reducer = handleActions({
       markdownContent: val
     }
   },
-  [types.START_READ_FILE](state) {
+  [types.START_LOADING](state) {
     return {
       ...state,
       loading: true
     }
   },
+  [types.FINISH_LOADING](state) {
+    return {
+      ...state,
+      loading: false
+    }
+  },
   [types.FINISH_READ_FILE](state, action) {
     if (!action.payload) {
       return {
-        ...state,
-        loading: false
+        ...state
       }
     }
     const {
@@ -61,7 +66,6 @@ const reducer = handleActions({
     } = action.payload;
     return {
       ...state,
-      loading: false,
       title,
       markdownContent: content
     }
