@@ -8,11 +8,10 @@ const initPage = createAction(types.INIT_PAGE);
 
 const onInputTitle = createAction(types.INPUT_TITLE);
 const onInputMarkdownContent = createAction(types.INPUT_MARKDOWN_CONTENT);
-const syncTitleAndContent = createAction(types.SYNC_TITLE_AND_CONTENT);
 const startLoading = createAction(types.START_LOADING);
 const finishLoading = createAction(types.FINISH_LOADING);
-
 const finishReadFile = createAction(types.FINISH_READ_FILE);
+const finishSaveFile = createAction(types.FINISH_SAVE_FILE);
 
 function doReadFile(filePath) {
   return dispatch => {
@@ -45,17 +44,16 @@ function doReadFile(filePath) {
 
 function doSaveFile(title, content, filePath) {
   return dispatch => {
-    dispatch(startLoading());
     const finalContent = getFinalContent(title, content);
-    saveFile(filePath, finalContent, title).then(() => {
+    saveFile(filePath, finalContent, title).then(obj => {
       message.success('保存成功');
-      dispatch(syncTitleAndContent()); // 保存成功了，需要重新同步一下标题和文本，用于去除*
-      dispatch(finishLoading());
+      dispatch(finishSaveFile({
+        filePath: obj.filePath
+      }));
     }).catch(e => {
       if (e) {
         message.error(e);
       }
-      dispatch(finishLoading());
     });
   }
 }

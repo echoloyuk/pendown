@@ -25,8 +25,9 @@ function saveFile (filePath, content, title) {
         reject(err);
         return;
       }
-      console.log('save success');
-      resolve();
+      resolve({
+        filePath
+      });
     })
   });
 }

@@ -55,13 +55,6 @@ const reducer = handleActions({
       loading: false
     }
   },
-  [types.SYNC_TITLE_AND_CONTENT](state) {
-    return {
-      ...state,
-      oTitle: state.title,
-      oMarkdownContent: state.markdownContent
-    }
-  },
   [types.FINISH_READ_FILE](state, action) {
     if (!action.payload) {
       return {
@@ -81,6 +74,18 @@ const reducer = handleActions({
       markdownContent: content,
       oTitle: title,
       oMarkdownContent: content
+    }
+  },
+  [types.FINISH_SAVE_FILE](state, action) {
+    const {
+      filePath
+    } = action.payload;
+    return {
+      ...state,
+      filePath,
+      oTitle: state.title,
+      oMarkdownContent: state.markdownContent,
+      pendownTitle: filePath
     }
   }
 }, initStates);
