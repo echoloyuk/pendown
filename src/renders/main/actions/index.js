@@ -8,7 +8,7 @@ const initPage = createAction(types.INIT_PAGE);
 
 const onInputTitle = createAction(types.INPUT_TITLE);
 const onInputMarkdownContent = createAction(types.INPUT_MARKDOWN_CONTENT);
-
+const syncTitleAndContent = createAction(types.SYNC_TITLE_AND_CONTENT);
 const startLoading = createAction(types.START_LOADING);
 const finishLoading = createAction(types.FINISH_LOADING);
 
@@ -19,7 +19,8 @@ function doReadFile(filePath) {
     dispatch(startLoading());
     readFile(filePath).then(res => {
       const {
-        data
+        data,
+        filePath
       } = res;
       const {
         title,
@@ -28,7 +29,8 @@ function doReadFile(filePath) {
       // 获取title和正文
       dispatch(finishReadFile({
         title,
-        content
+        content,
+        filePath
       }));
       dispatch(finishLoading());
     }).catch(e => {
@@ -45,8 +47,9 @@ function doSaveFile(title, content, filePath) {
   return dispatch => {
     dispatch(startLoading());
     const finalContent = getFinalContent(title, content);
-    saveFile(filePath, finalContent).then(() => {
+    saveFile(filePath, finalContent, title).then(() => {
       message.success('保存成功');
+      dispatch(syncTitleAndContent()); // 保存成功了，需要重新同步一下标题和文本，用于去除*
       dispatch(finishLoading());
     }).catch(e => {
       if (e) {

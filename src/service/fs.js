@@ -1,13 +1,14 @@
 const fs = require('fs');
 const { dialog } = require('electron').remote;
 
-function saveFile (filePath, content) {
+function saveFile (filePath, content, title) {
   if (!content) {
     content = '';
   }
   // 如果是新增，需要弹出一个新的窗口来保存
   if (!filePath) {
     filePath = dialog.showSaveDialog({
+      defaultPath: title,
       nameFieldLabel: '文件名',
       filters: [
         {name: 'markdown', extensions: ['md', 'markdown']}
@@ -45,7 +46,7 @@ function readFile(filePath) {
       if (filePath && filePath.length) {
         filePath = filePath[0];
       } else {
-        reject('读取文件失败');
+        reject();
       }
     }
     if (!filePath) {

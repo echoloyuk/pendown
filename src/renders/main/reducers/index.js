@@ -12,7 +12,8 @@ const initStates = {
   
   pendownTitle: 'pendown', // pendown软件的title框
   oTitle: '', // 原始的文章标题
-  oMarkdownContent: '' // 原始的文章markdown正文
+  oMarkdownContent: '', // 原始的文章markdown正文
+  filePath: null,
 }
 
 const reducer = handleActions({
@@ -54,6 +55,13 @@ const reducer = handleActions({
       loading: false
     }
   },
+  [types.SYNC_TITLE_AND_CONTENT](state) {
+    return {
+      ...state,
+      oTitle: state.title,
+      oMarkdownContent: state.markdownContent
+    }
+  },
   [types.FINISH_READ_FILE](state, action) {
     if (!action.payload) {
       return {
@@ -62,12 +70,17 @@ const reducer = handleActions({
     }
     const {
       title,
-      content
+      content,
+      filePath
     } = action.payload;
     return {
       ...state,
       title,
-      markdownContent: content
+      filePath,
+      pendownTitle: filePath,
+      markdownContent: content,
+      oTitle: title,
+      oMarkdownContent: content
     }
   }
 }, initStates);

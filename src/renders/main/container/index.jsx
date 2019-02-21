@@ -21,9 +21,10 @@ class Container extends React.Component {
     const {
       doSaveFile,
       title,
-      markdownContent
+      markdownContent,
+      filePath
     } = this.props;
-    doSaveFile(title, markdownContent);
+    doSaveFile(title, markdownContent, filePath);
   }
 
   doRead() {
