@@ -7,6 +7,10 @@ node_modules
 bower_components
 npm-debug.log
 
+############################
+# electron files
+############################
+pendown-darwin-x64
 
 ############################
 # Temp files
