@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon } from 'antd';
+import { remote } from 'electron';
 import './index.scss';
 
 export default class SideBar extends React.Component {
@@ -7,7 +8,13 @@ export default class SideBar extends React.Component {
     super(props);
     this.onSaveHandler = this.onSaveHandler.bind(this);
     this.onReadHandler = this.onReadHandler.bind(this);
+    this.onTest = this.onTest.bind(this);
   }
+
+  onTest() {
+    alert(remote.app.selfTest);
+  }
+
   onSaveHandler() {
     const {
       onSave
@@ -39,7 +46,7 @@ export default class SideBar extends React.Component {
             <Icon type="folder-open" />
           </div>
           <div className="item">
-            <Icon type="setting" />
+            <Icon type="setting" onClick={this.onTest}/>
           </div>
         </div>
       </div>
