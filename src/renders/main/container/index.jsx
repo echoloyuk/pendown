@@ -10,6 +10,8 @@ import OP from '../constants/op';
 import { getOP } from '../util/op';
 import { setTitle } from '../api/others';
 
+import { ipcRenderer } from 'electron';
+
 import './index.scss';
 
 class Container extends React.Component {
@@ -27,11 +29,11 @@ class Container extends React.Component {
     doSaveFile(title, markdownContent, filePath);
   }
 
-  doRead() {
+  doRead(filePath) {
     const {
       doReadFile
     } = this.props;
-    doReadFile();
+    doReadFile(filePath);
   }
   
   shouldComponentUpdate(nextProps) {
@@ -52,7 +54,8 @@ class Container extends React.Component {
 
   componentDidMount() {
     const {
-      pendownTitle
+      pendownTitle,
+      doReadFile
     } = this.props;
     setTitle(pendownTitle);
     // 绑定save事件
@@ -70,6 +73,13 @@ class Container extends React.Component {
           break;
       }
     });
+
+    // 当从主进程中收到了打开文件的推送消息时，弹出窗口
+    ipcRenderer.on('OPEN_FILE', (e, p) => {
+      doReadFile(p);
+    });
+    // 当container完成加载之后，需要通知主进程，如果主进程中有事件需要通知渲染进程，则通知主进程可以通知了
+    ipcRenderer.send('RENDERER_FINISH', true);
   }
 
   render() {

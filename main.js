@@ -1,10 +1,10 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron');
-const { dialog } = require('electron');
+const { ipcMain } = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
 function createWindow () {
   // Create the browser window.
@@ -23,16 +23,31 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
-  })
+  });
 }
 
-console.log(process.argv);
+// 主进程监听渲染进程什么时候真正ready了
+ipcMain.on('RENDERER_FINISH', (e, p) => {
+  console.log(p);
+  app.eventArr = app.eventArr.filter((item, index) => {
+    if (item.type === 'OPEN_FILE') {
+      e.sender.send('OPEN_FILE', item.payload);
+      return false;
+    } else {
+      return true;
+    }
+  });
+});
+
+app.eventArr = [];
 
 // 用于直接通过dock启动的打开文件
 app.on('open-file', function(e, path) {
-  console.log(e);
-  console.log(path);
   app.selfTest = path;
+  app.eventArr.push({
+    type: 'OPEN_FILE',
+    payload: path
+  });
 });
 
 // This method will be called when Electron has finished
@@ -55,7 +70,7 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
-})
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
