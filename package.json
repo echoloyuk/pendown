@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
     "dev": "webpack --mode development -w",
-    "package": "electron-packager . --ignore=node_modules --overwrite"
+    "package": "electron-packager . --ignore=node_modules --overwrite --icon=./pendown-icon.icns"
   },
   "author": "",
   "license": "ISC",

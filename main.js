@@ -1,6 +1,32 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron');
-const { ipcMain } = require('electron');
+const {app, BrowserWindow, ipcMain, Menu} = require('electron');
+const menuTemp = [{
+  label: 'Pendown',
+  submenu: [{
+    label: '关闭',
+    accelerator: 'CmdOrCtrl+Q',
+    role: 'quit'
+  }]
+}, {
+  label: '编辑',
+  submenu: [{
+    label: '复制',
+    accelerator: 'CmdOrCtrl+C',
+    role: 'copy'
+  }, {
+    label: '粘贴',
+    accelerator: 'CmdOrCtrl+V',
+    role: 'paste'
+  }]
+}, {
+  label: '帮助',
+  role: 'window',
+  submenu: [{
+    label: 'About',
+    role: 'about'
+  }]
+}
+]
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -8,7 +34,7 @@ let mainWindow;
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 1000, height: 600});
 
   // and load the index.html of the app.
   mainWindow.loadFile('./entry/main/index.html')
@@ -24,6 +50,9 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
   });
+
+  const menu = Menu.buildFromTemplate(menuTemp);
+  Menu.setApplicationMenu(menu);
 }
 
 // 主进程监听渲染进程什么时候真正ready了
@@ -39,6 +68,7 @@ ipcMain.on('RENDERER_FINISH', (e, p) => {
   });
 });
 
+// 事件队列
 app.eventArr = [];
 
 // 用于直接通过dock启动的打开文件
