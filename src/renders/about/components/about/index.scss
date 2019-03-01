@@ -1,0 +1,26 @@
+.about-panel {
+  font-size: 13px;
+  line-height: 1.8em;
+  color: #666;
+  margin: 10px 0;
+
+  .title {
+    text-align: center;
+  }
+  .logo {
+    width: 128px;
+    height: 128px;
+    background: url('../../../../../pendown.png') no-repeat center;
+    background-size: contain;
+    margin: 10px auto;
+  }
+  .content {
+    padding: 20px;
+    margin: 0 auto;
+    width: 380px;
+    text-align: center;
+  }
+  .copy {
+    text-align: center;
+  }
+}
