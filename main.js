@@ -6,8 +6,6 @@ const {
   Menu
 } = require('electron');
 
-const pkg = require('./package.json');
-
 const menuTemp = [{
   label: 'Pendown',
   submenu: [{
@@ -95,7 +93,11 @@ app.on('open-file', function (e, path) {
   });
 });
 
-app.on('ready', createWindow)
+app.on('ready', createWindow);
+
+app.on('before-quit', e => {
+  console.log(12312123);
+})
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
