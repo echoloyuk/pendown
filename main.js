@@ -5,6 +5,7 @@ const {
   ipcMain,
   Menu
 } = require('electron');
+const { createUid } = require('./src/service/uid');
 
 const menuTemp = [{
   label: 'Pendown',
@@ -33,27 +34,49 @@ const menuTemp = [{
       openAbout();
     }
   }]
-}]
+}];
 
-let mainWindow;
-let aboutWindow;
 
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 600
-  });
-  mainWindow.loadFile('./entry/main/index.html');
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  });
+// 事件队列
+app.eventArr = [];
+// 所有窗口对象
+app.windowMap = [];
+// 关于窗口
+app.aboutWindow = null;
 
+function init() {
   const menu = Menu.buildFromTemplate(menuTemp);
   Menu.setApplicationMenu(menu);
+
+  openNewWindow();
+}
+
+function openNewWindow() {
+  const window = new BrowserWindow({
+    width: 1000,
+    height: 600
+  }); // // 创建一个窗口
+  const id = createUid(); // uid
+  window.loadFile('./entry/main/index.html');
+  window.on('closed', () => {
+    delete app.windowMap[id];
+  });
+
+  // 记录窗口
+  const win = {
+    window,
+    state: {
+      isFinishRender: false,
+      isUsed: false
+    }
+  }
+
+  app.windowMap[id] = win;
+  console.log(app.windowMap);
 }
 
 function openAbout() {
-  aboutWindow = new BrowserWindow({
+  const aboutWindow = new BrowserWindow({
     width: 500,
     height: 360,
     minimizable: false,
@@ -66,7 +89,42 @@ function openAbout() {
   aboutWindow.on('closed', () => {
     aboutWindow = null;
   });
+  app.aboutWindow = aboutWindow;
 }
+
+app.on('ready', init);
+
+app.on('before-quit', e => {
+  console.log(12312123);
+})
+
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+
+ipcMain.on('renderer_ipc', (event, payload) => {
+  console.log('收到了渲染进程的通信内容');
+  console.log(payload);
+  const win = event.sender;
+  let curWindow;
+  Object.keys(app.windowMap).map(key => {
+    const cur = app.windowMap[key];
+    if (cur.window.webContents === win) {
+      curWindow = app.windowMap[key];
+    }
+  });
+  if (curWindow) { // 找到了窗口
+    curWindow.state.isFinishRender = true;
+  }
+  console.log('---');
+  console.log(app.windowMap);
+})
+
+// -------------------
+
 
 // 主进程监听渲染进程什么时候真正ready了
 ipcMain.on('RENDERER_FINISH', (e, p) => {
@@ -81,8 +139,7 @@ ipcMain.on('RENDERER_FINISH', (e, p) => {
   });
 });
 
-// 事件队列
-app.eventArr = [];
+
 
 // 用于直接通过dock启动的打开文件
 app.on('open-file', function (e, path) {
@@ -93,20 +150,10 @@ app.on('open-file', function (e, path) {
   });
 });
 
-app.on('ready', createWindow);
 
-app.on('before-quit', e => {
-  console.log(12312123);
-})
-
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', function () {
-  if (mainWindow === null) {
-    createWindow()
-  }
-});
+// app.on('activate', function () {
+//   if (!app.windowList.length) {
+//     openNewWindow();
+//     openNewWindow();
+//   }
+// });

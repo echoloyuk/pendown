@@ -80,6 +80,12 @@ class Container extends React.Component {
     });
     // 当container完成加载之后，需要通知主进程，如果主进程中有事件需要通知渲染进程，则通知主进程可以通知了
     ipcRenderer.send('RENDERER_FINISH', true);
+
+
+    // 新架构
+    ipcRenderer.send('renderer_ipc', {
+      type: 'renderer_finish'
+    })
   }
 
   render() {
