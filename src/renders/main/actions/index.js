@@ -4,6 +4,8 @@ import { getTitleAndContent, getFinalContent } from '../../../service/util';
 import { message } from 'antd';
 import * as types from '../constants/ActionTypes';
 
+import { ipcRenderer } from 'electron';
+
 const initPage = createAction(types.INIT_PAGE);
 
 const onInputTitle = createAction(types.INPUT_TITLE);
@@ -58,10 +60,28 @@ function doSaveFile(title, content, filePath) {
   }
 }
 
+function rendererUsed() {
+  return () => {
+    ipcRenderer.send('renderer_ipc', {
+      type: 'have_used'
+    });
+  }
+}
+
+function rendererFinished() {
+  return () => {
+    ipcRenderer.send('renderer_ipc', {
+      type: 'renderer_finish'
+    });
+  }
+}
+
 export {
   initPage,
   onInputTitle,
   onInputMarkdownContent,
   doReadFile,
-  doSaveFile
+  doSaveFile,
+  rendererUsed,
+  rendererFinished
 }

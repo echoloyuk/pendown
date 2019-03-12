@@ -42,20 +42,29 @@ class Container extends React.Component {
       oMarkdownContent,
       title,
       markdownContent,
-      pendownTitle
+      pendownTitle,
+      rendererUsed,
+      haveUsed
     } = nextProps;
+
     if (oTitle === title && oMarkdownContent === markdownContent) {
       setTitle(pendownTitle);
     } else {
       setTitle('* ' + pendownTitle);
     }
+
+    if (haveUsed && !this.props.haveUsed) {
+      rendererUsed();
+    }
+
     return true;
   }
 
   componentDidMount() {
     const {
       pendownTitle,
-      doReadFile
+      doReadFile,
+      rendererFinished
     } = this.props;
     setTitle(pendownTitle);
     // 绑定save事件
@@ -83,9 +92,7 @@ class Container extends React.Component {
 
 
     // 新架构
-    ipcRenderer.send('renderer_ipc', {
-      type: 'renderer_finish'
-    })
+    rendererFinished();
   }
 
   render() {

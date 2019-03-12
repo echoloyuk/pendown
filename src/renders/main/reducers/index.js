@@ -5,11 +5,10 @@ import * as types from '../constants/ActionTypes';
 const initStates = {
   buttonText: '点击+1',
   exampleCount: 0,
-
   title: '', // 标题
   markdownContent: '', // markdown原文
   loading: false, // 全屏阻塞加载
-  
+  haveUsed: false, // 当前是否被使用
   pendownTitle: 'pendown', // pendown软件的title框
   oTitle: '', // 原始的文章标题
   oMarkdownContent: '', // 原始的文章markdown正文
@@ -17,30 +16,20 @@ const initStates = {
 }
 
 const reducer = handleActions({
-  [types.INIT_PAGE] (state, action) {
-    if (action.payload) {
-      return {
-        ...state,
-        exampleCount: ++state.exampleCount
-      }
-    } else {
-      return {
-        ...state
-      }
-    }
-  },
   [types.INPUT_TITLE] (state, action) {
     const val = action.payload;
     return {
       ...state,
-      title: val
+      title: val,
+      haveUsed: true
     }
   },
   [types.INPUT_MARKDOWN_CONTENT] (state, action) {
     const val = action.payload;
     return {
       ...state,
-      markdownContent: val
+      markdownContent: val,
+      haveUsed: true
     }
   },
   [types.START_LOADING](state) {
@@ -73,7 +62,8 @@ const reducer = handleActions({
       pendownTitle: filePath,
       markdownContent: content,
       oTitle: title,
-      oMarkdownContent: content
+      oMarkdownContent: content,
+      haveUsed: true
     }
   },
   [types.FINISH_SAVE_FILE](state, action) {

@@ -40,16 +40,21 @@ const menuTemp = [{
 // 事件队列
 app.eventArr = [];
 // 所有窗口对象
-app.windowMap = [];
+app.windowMap = {};
 // 关于窗口
 app.aboutWindow = null;
 
 function init() {
-  const menu = Menu.buildFromTemplate(menuTemp);
-  Menu.setApplicationMenu(menu);
+  // const menu = Menu.buildFromTemplate(menuTemp);
+  // Menu.setApplicationMenu(menu);
 
   openNewWindow();
 }
+
+const defaultWindowObject = {
+  isFinishRender: false,
+  isUsed: false
+};
 
 function openNewWindow() {
   const window = new BrowserWindow({
@@ -60,14 +65,14 @@ function openNewWindow() {
   window.loadFile('./entry/main/index.html');
   window.on('closed', () => {
     delete app.windowMap[id];
+    console.log(app.windowMap);
   });
 
   // 记录窗口
   const win = {
     window,
     state: {
-      isFinishRender: false,
-      isUsed: false
+      ...defaultWindowObject
     }
   }
 
@@ -116,8 +121,18 @@ ipcMain.on('renderer_ipc', (event, payload) => {
       curWindow = app.windowMap[key];
     }
   });
-  if (curWindow) { // 找到了窗口
-    curWindow.state.isFinishRender = true;
+  if (!curWindow) { // 没找到窗口，异常情况
+    return;    
+  }
+  switch (payload.type) {
+    case 'renderer_finish':
+      curWindow.state.isFinishRender = true;
+      break;
+    case 'have_used':
+      curWindow.state.isUsed = true;
+      break;
+    default:
+      break;
   }
   console.log('---');
   console.log(app.windowMap);
