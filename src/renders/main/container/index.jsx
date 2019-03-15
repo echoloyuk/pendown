@@ -38,19 +38,23 @@ class Container extends React.Component {
   
   shouldComponentUpdate(nextProps) {
     const {
-      oTitle,
-      oMarkdownContent,
-      title,
-      markdownContent,
       pendownTitle,
       rendererUsed,
-      haveUsed
+      haveUsed,
+      isChanged,
+      rendererChanged
     } = nextProps;
 
-    if (oTitle === title && oMarkdownContent === markdownContent) {
-      setTitle(pendownTitle);
-    } else {
-      setTitle('* ' + pendownTitle);
+    console.log('isChanged', isChanged);
+
+    if (this.props.isChanged !== isChanged) {
+      if (!isChanged) {
+        setTitle(pendownTitle);
+        rendererChanged(false);
+      } else {
+        setTitle('* ' + pendownTitle);
+        rendererChanged(true);
+      }
     }
 
     if (haveUsed && !this.props.haveUsed) {

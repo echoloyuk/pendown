@@ -76,6 +76,15 @@ function rendererFinished() {
   }
 }
 
+function rendererChanged(isChanged) {
+  return () => {
+    ipcRenderer.send('renderer_ipc', {
+      type: 'content_change',
+      isChanged
+    });
+  }
+}
+
 export {
   initPage,
   onInputTitle,
@@ -83,5 +92,6 @@ export {
   doReadFile,
   doSaveFile,
   rendererUsed,
-  rendererFinished
+  rendererFinished,
+  rendererChanged
 }

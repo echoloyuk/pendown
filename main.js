@@ -53,7 +53,8 @@ function init() {
 
 const defaultWindowObject = {
   isFinishRender: false,
-  isUsed: false
+  isUsed: false,
+  isChanged: false
 };
 
 function openNewWindow() {
@@ -112,7 +113,7 @@ app.on('window-all-closed', function () {
 
 ipcMain.on('renderer_ipc', (event, payload) => {
   console.log('收到了渲染进程的通信内容');
-  console.log(payload);
+  console.log('payload:', payload);
   const win = event.sender;
   let curWindow;
   Object.keys(app.windowMap).map(key => {
@@ -131,10 +132,13 @@ ipcMain.on('renderer_ipc', (event, payload) => {
     case 'have_used':
       curWindow.state.isUsed = true;
       break;
+    case 'content_change':
+      curWindow.state.isChanged = payload.isChanged;
+      break;
     default:
       break;
   }
-  console.log('---');
+  console.log('--- 更新后：---');
   console.log(app.windowMap);
 })
 
